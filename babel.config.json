@@ -1,0 +1,12 @@
+{
+  "targets": ">0.5%",
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "useBuiltIns": "entry",
+        "corejs": "3.22"
+      }
+    ]
+  ]
+}
