@@ -6,15 +6,15 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {createUser} from '../../data-access-layer/users/create-user';
-import {User} from '../../interfaces/user.interface';
+import {createUser} from '../../service-layer/users/create-user';
+import {UserCreationAttributes} from '../../data-access-layer/models/user';
 import {
   EXCEPTION_BAD_DATA,
   EXCEPTION_INTERNAL_SERVER_ERROR,
 } from '../../utils/exceptions';
 
 interface userGetRequestSchema extends ValidatedRequestSchema {
-  [ContainerTypes.Body]: Partial<User>;
+  [ContainerTypes.Body]: UserCreationAttributes;
 }
 
 export async function userCreate(
