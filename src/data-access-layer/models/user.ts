@@ -1,4 +1,5 @@
 import {DataTypes, Model, Optional} from 'sequelize';
+import {UserGroupModel} from './user-group';
 import sequelize from '../index';
 
 export interface UserAttributes {
@@ -12,7 +13,7 @@ export interface UserAttributes {
 export interface UserCreationAttributes
   extends Optional<UserAttributes, 'id' | 'is_deleted'> {}
 
-export const UserModel = sequelize.define<
+const UserModel = sequelize.define<
   Model<UserAttributes, UserCreationAttributes>
 >(
   'User',
@@ -48,6 +49,10 @@ export const UserModel = sequelize.define<
   },
   {
     timestamps: false,
-    tableName: 'Users',
+    tableName: 'users',
   }
 );
+
+UserModel.hasMany(UserGroupModel, {as: 'user_groups', foreignKey: 'user_id'});
+
+export {UserModel};

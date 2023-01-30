@@ -6,10 +6,10 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {getUsers} from '../../service-layer/users/get-users';
+import {getGroups} from '../../service-layer/groups/get-groups';
 import {EXCEPTION_INTERNAL_SERVER_ERROR} from '../../utils/exceptions';
 
-interface userGetRequestSchema extends ValidatedRequestSchema {
+interface groupGetRequestSchema extends ValidatedRequestSchema {
   [ContainerTypes.Query]: {
     limit?: number;
     offset?: number;
@@ -17,22 +17,22 @@ interface userGetRequestSchema extends ValidatedRequestSchema {
   };
 }
 
-export async function usersGet(
-  req: ValidatedRequest<userGetRequestSchema>,
+export async function groupsGet(
+  req: ValidatedRequest<groupGetRequestSchema>,
   res: Express.Response
 ) {
   try {
-    const {users, count, limit, offset, filter} = await getUsers({
+    const {groups, count, limit, offset, filter} = await getGroups({
       limit: req.query.limit,
       offset: req.query.offset,
       filter: req.query.filter,
     });
     res.status(200);
     res.send({
-      users,
+      groups,
       ...(count > offset
         ? {
-            nextPageParams: `http://localhost:7070/users?limit=${limit}&offset=${offset}${
+            nextPageParams: `http://localhost:7070/groups?limit=${limit}&offset=${offset}${
               filter ? `filter=${filter}` : ''
             }`,
           }

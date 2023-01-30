@@ -29,7 +29,6 @@ export async function createUser(user: UserCreationAttributes): Promise<any> {
       age: user.age,
       password: passwordEncrypted,
     });
-    console.log(userCreated);
     return userCreated;
   } catch (error: any) {
     console.log(error);

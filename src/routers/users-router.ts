@@ -14,7 +14,7 @@ import {
   usersGetQuerySchema,
   userUpdateBodySchema,
   userUpdateParamsSchema,
-} from '../utils/shema';
+} from '../utils/schema/user';
 import {userByIdDelete} from '../presentation-layer/users/user-by-id-delete';
 import {userUpdate} from '../presentation-layer/users/user-update';
 

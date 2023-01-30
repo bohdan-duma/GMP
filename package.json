@@ -2,8 +2,10 @@
   "name": "gmp",
   "version": "1.0.0",
   "scripts": {
-    "start": "npx nodemon",
-    "compile": "tsc"
+    "start": "npm run migrate:up && npx nodemon",
+    "compile": "tsc",
+    "migrate:up": "npx sequelize-cli db:migrate",
+    "migrate:undo": "npx sequelize-cli db:migrate:undo"
   },
   "repository": {
     "type": "git",
