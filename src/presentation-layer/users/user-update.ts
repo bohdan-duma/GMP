@@ -6,7 +6,7 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {updateUser} from '../../data-access-layer/users/update-user';
+import {updateUser} from '../../service-layer/users/update-user';
 import {
   EXCEPTION_BAD_DATA,
   EXCEPTION_INTERNAL_SERVER_ERROR,

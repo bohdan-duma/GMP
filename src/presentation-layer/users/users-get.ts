@@ -6,8 +6,8 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {updateUser} from '../../data-access-layer/users/update-user';
-import {getUsers} from '../../data-access-layer/users/get-users';
+import {updateUser} from '../../service-layer/users/update-user';
+import {getUsers} from '../../service-layer/users/get-users';
 import {EXCEPTION_INTERNAL_SERVER_ERROR} from '../../utils/exceptions';
 
 interface userGetRequestSchema extends ValidatedRequestSchema {

@@ -6,7 +6,7 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {deleteUserById} from '../../data-access-layer/users/delete-user-by-id';
+import {deleteUserById} from '../../service-layer/users/delete-user-by-id';
 import {
   EXCEPTION_INTERNAL_SERVER_ERROR,
   EXCEPTION_USER_NOT_FOUND,
