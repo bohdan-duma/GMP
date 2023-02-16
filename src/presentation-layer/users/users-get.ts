@@ -19,7 +19,8 @@ interface userGetRequestSchema extends ValidatedRequestSchema {
 
 export async function usersGet(
   req: ValidatedRequest<userGetRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const {users, count, limit, offset, filter} = await getUsers({
@@ -39,8 +40,6 @@ export async function usersGet(
         : {}),
     });
   } catch (error: any) {
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }

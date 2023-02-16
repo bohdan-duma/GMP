@@ -6,7 +6,6 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {permissionsEnum} from '../../data-access-layer/constants/permissions';
 import {updateGroupUsers} from '../../service-layer/groups/update-users';
 import {
   EXCEPTION_BAD_DATA,
@@ -21,7 +20,8 @@ interface groupUsersUpdateRequestSchema extends ValidatedRequestSchema {
 
 export async function groupUsersUpdate(
   req: ValidatedRequest<groupUsersUpdateRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const {groupId} = req.params;
@@ -35,8 +35,6 @@ export async function groupUsersUpdate(
       res.send(error.message ?? error.type);
       return;
     }
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }

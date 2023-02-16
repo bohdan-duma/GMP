@@ -1,3 +1,4 @@
+import {getError} from '../../utils/error';
 import {permissionsEnum} from '../../data-access-layer/constants/permissions';
 import {GroupModel} from '../../data-access-layer/models/group';
 import {EXCEPTION_GROUP_NOT_FOUND} from '../../utils/exceptions';
@@ -13,7 +14,10 @@ export async function updateGroup({
 }): Promise<any> {
   const group = await GroupModel.findOne({where: {id: groupId}});
   if (!group) {
-    throw {type: EXCEPTION_GROUP_NOT_FOUND, message: 'Group not found'};
+    throw getError({
+      type: EXCEPTION_GROUP_NOT_FOUND,
+      message: 'Group not found',
+    });
   }
 
   const uniqPermissions = [...new Set(permissions)];

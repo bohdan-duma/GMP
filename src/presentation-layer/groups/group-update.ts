@@ -21,7 +21,8 @@ interface groupGetRequestSchema extends ValidatedRequestSchema {
 
 export async function groupUpdate(
   req: ValidatedRequest<groupGetRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const {groupId} = req.params;
@@ -35,8 +36,6 @@ export async function groupUpdate(
       res.send(error.message ?? error.type);
       return;
     }
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }
