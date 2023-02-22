@@ -19,7 +19,8 @@ interface userGetRequestSchema extends ValidatedRequestSchema {
 
 export async function userCreate(
   req: ValidatedRequest<userGetRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const userCreated = await createUser(req.body);
@@ -31,8 +32,6 @@ export async function userCreate(
       res.send(error.message ?? error.type);
       return;
     }
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }

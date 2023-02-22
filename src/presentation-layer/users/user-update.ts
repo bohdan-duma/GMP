@@ -20,7 +20,8 @@ interface userGetRequestSchema extends ValidatedRequestSchema {
 
 export async function userUpdate(
   req: ValidatedRequest<userGetRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const {userId} = req.params;
@@ -34,8 +35,6 @@ export async function userUpdate(
       res.send(error.message ?? error.type);
       return;
     }
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }

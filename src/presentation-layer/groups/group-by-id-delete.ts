@@ -18,7 +18,8 @@ interface groupGetRequestSchema extends ValidatedRequestSchema {
 
 export async function groupByIdDelete(
   req: ValidatedRequest<groupGetRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const {groupId} = req.params;
@@ -31,8 +32,6 @@ export async function groupByIdDelete(
       res.send(error.message ?? error.type);
       return;
     }
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }

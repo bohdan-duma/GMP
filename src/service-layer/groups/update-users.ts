@@ -1,6 +1,7 @@
 import sequelize from '../../data-access-layer/index';
 import {GroupModel} from '../../data-access-layer/models/group';
 import {EXCEPTION_GROUP_NOT_FOUND} from '../../utils/exceptions';
+import {getError} from '../../utils/error';
 import {UserModel} from '../../data-access-layer/models/user';
 import {Op} from 'sequelize';
 import {UserGroupModel} from '../../data-access-layer/models/user-group';
@@ -17,7 +18,10 @@ export async function updateGroupUsers({
     where: {id: groupId},
   });
   if (!group) {
-    throw {type: EXCEPTION_GROUP_NOT_FOUND, message: 'Group not found'};
+    throw getError({
+      type: EXCEPTION_GROUP_NOT_FOUND,
+      message: 'Group not found',
+    });
   }
 
   const users: any = await UserModel.findAll({

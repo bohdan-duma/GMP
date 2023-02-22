@@ -19,7 +19,8 @@ interface groupGetRequestSchema extends ValidatedRequestSchema {
 
 export async function groupsGet(
   req: ValidatedRequest<groupGetRequestSchema>,
-  res: Express.Response
+  res: Express.Response,
+  next: Express.NextFunction
 ) {
   try {
     const {groups, count, limit, offset, filter} = await getGroups({
@@ -39,8 +40,6 @@ export async function groupsGet(
         : {}),
     });
   } catch (error: any) {
-    console.error(error);
-    res.status(500);
-    res.send(EXCEPTION_INTERNAL_SERVER_ERROR);
+    next(error);
   }
 }
