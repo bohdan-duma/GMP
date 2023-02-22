@@ -1,4 +1,5 @@
 import {Op} from 'sequelize';
+import {UserGroupModel} from '../../data-access-layer/models/user-group';
 import {UserAttributes, UserModel} from '../../data-access-layer/models/user';
 
 export async function getUsers({
@@ -16,7 +17,8 @@ export async function getUsers({
   offset: number;
   filter: string;
 }> {
-  const users = await UserModel.findAll({
+  const {count, rows: users} = await UserModel.findAndCountAll({
+    include: [{model: UserGroupModel, as: 'user_groups'}],
     where: {
       is_deleted: false,
       login: {[Op.iLike]: `%${filter}%`},
@@ -24,12 +26,7 @@ export async function getUsers({
     order: ['login'],
     limit,
     offset,
-  });
-  const count = await UserModel.count({
-    where: {
-      is_deleted: false,
-      login: {[Op.iLike]: `%${filter}%`},
-    },
+    raw: true,
   });
   return {
     users: users.slice(offset, offset + limit),

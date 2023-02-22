@@ -5,19 +5,14 @@ import {
   UserModel,
 } from '../../data-access-layer/models/user';
 import {EXCEPTION_BAD_DATA} from '../../utils/exceptions';
+import {getError} from '../../utils/error';
 
 export async function createUser(user: UserCreationAttributes): Promise<any> {
-  if (!user.age || user.age < 4 || user.age > 130) {
-    throw {
-      type: EXCEPTION_BAD_DATA,
-      message: 'User age should be in range [4, 130]',
-    };
-  }
   if (!user.password || !/^[A-Za-z0-9]+$/.test(user.password)) {
-    throw {
+    throw getError({
       type: EXCEPTION_BAD_DATA,
       message: 'Password should contain only letters and numbers',
-    };
+    });
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -29,12 +24,13 @@ export async function createUser(user: UserCreationAttributes): Promise<any> {
       age: user.age,
       password: passwordEncrypted,
     });
-    console.log(userCreated);
     return userCreated;
   } catch (error: any) {
-    console.log(error);
     if (error.name === 'SequelizeUniqueConstraintError') {
-      throw {type: EXCEPTION_BAD_DATA, message: 'User already exists'};
+      throw getError({
+        type: EXCEPTION_BAD_DATA,
+        message: 'User already exists',
+      });
     }
     throw error;
   }

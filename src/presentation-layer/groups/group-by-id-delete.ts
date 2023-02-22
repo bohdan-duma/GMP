@@ -6,28 +6,28 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {deleteUserById} from '../../service-layer/users/delete-user-by-id';
+import {deleteGroupById} from '../../service-layer/groups/delete-group-by-id';
 import {
   EXCEPTION_INTERNAL_SERVER_ERROR,
-  EXCEPTION_USER_NOT_FOUND,
+  EXCEPTION_GROUP_NOT_FOUND,
 } from '../../utils/exceptions';
 
-interface userGetRequestSchema extends ValidatedRequestSchema {
-  [ContainerTypes.Params]: {userId: string};
+interface groupGetRequestSchema extends ValidatedRequestSchema {
+  [ContainerTypes.Params]: {groupId: string};
 }
 
-export async function userByIdDelete(
-  req: ValidatedRequest<userGetRequestSchema>,
+export async function groupByIdDelete(
+  req: ValidatedRequest<groupGetRequestSchema>,
   res: Express.Response,
   next: Express.NextFunction
 ) {
   try {
-    const {userId} = req.params;
-    await deleteUserById(userId);
+    const {groupId} = req.params;
+    await deleteGroupById(groupId);
     res.status(204);
     res.send();
   } catch (error: any) {
-    if ([EXCEPTION_USER_NOT_FOUND].includes(error.type)) {
+    if ([EXCEPTION_GROUP_NOT_FOUND].includes(error.type)) {
       res.status(400);
       res.send(error.message ?? error.type);
       return;

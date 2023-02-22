@@ -6,31 +6,28 @@ import {
   // Extend from this to define a valid schema type/interface
   ValidatedRequestSchema,
 } from 'express-joi-validation';
-import {updateUser} from '../../service-layer/users/update-user';
+import {getGroupById} from '../../service-layer/groups/get-group-by-id';
 import {
-  EXCEPTION_BAD_DATA,
   EXCEPTION_INTERNAL_SERVER_ERROR,
-  EXCEPTION_USER_NOT_FOUND,
+  EXCEPTION_GROUP_NOT_FOUND,
 } from '../../utils/exceptions';
 
-interface userGetRequestSchema extends ValidatedRequestSchema {
-  [ContainerTypes.Params]: {userId: string};
-  [ContainerTypes.Body]: {age: number};
+interface groupGetRequestSchema extends ValidatedRequestSchema {
+  [ContainerTypes.Params]: {groupId: string};
 }
 
-export async function userUpdate(
-  req: ValidatedRequest<userGetRequestSchema>,
+export async function groupByIdGet(
+  req: ValidatedRequest<groupGetRequestSchema>,
   res: Express.Response,
   next: Express.NextFunction
 ) {
   try {
-    const {userId} = req.params;
-    const {age} = req.body;
-    const user = await updateUser({userId, age});
+    const {groupId} = req.params;
+    const group = await getGroupById(groupId);
     res.status(200);
-    res.send({user});
+    res.send({group});
   } catch (error: any) {
-    if ([EXCEPTION_USER_NOT_FOUND, EXCEPTION_BAD_DATA].includes(error.type)) {
+    if ([EXCEPTION_GROUP_NOT_FOUND].includes(error.type)) {
       res.status(400);
       res.send(error.message ?? error.type);
       return;
