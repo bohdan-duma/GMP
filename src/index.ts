@@ -1,11 +1,12 @@
 import * as express from 'express';
+import * as dotenv from 'dotenv';
 import * as morgan from 'morgan';
 import {groupRouter} from './routers/groups-router';
+import {tokenRouter} from './routers/token-router';
 import {userRouter} from './routers/users-router';
-
-morgan.token('type', function (req, res) {
-  return req.headers['content-type'];
-});
+import {checkTokenMiddleware} from './middlewares/checkToken';
+import {errorHandlerMiddleware} from './middlewares/errorHandler';
+dotenv.config();
 
 const app = express();
 
@@ -25,33 +26,12 @@ app.use(
 );
 
 // Routers
+app.use('/token', tokenRouter);
 app.use('/users', userRouter);
-app.use('/groups', groupRouter);
+app.use('/groups', checkTokenMiddleware, groupRouter);
 
 // Error handler
-app.use(
-  (
-    err: Error,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) => {
-    console.error(
-      JSON.stringify(
-        {
-          error: err,
-          method: req.method,
-          body: req.body,
-          params: req.params,
-          query: req.query,
-        },
-        null,
-        2
-      )
-    );
-    res.status(500).send('Something broke!');
-  }
-);
+app.use(errorHandlerMiddleware);
 
 app.listen(7070, () => {
   console.log('Listening port 7070\nCheck http://localhost:7070/users/');

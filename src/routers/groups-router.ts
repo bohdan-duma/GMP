@@ -1,5 +1,4 @@
 import * as express from 'express';
-import {createReadStream} from 'fs';
 import {
   // Creates a validator that generates middlewares
   createValidator,

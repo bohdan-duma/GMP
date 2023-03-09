@@ -1,5 +1,4 @@
 import * as express from 'express';
-import {createReadStream} from 'fs';
 import {
   // Creates a validator that generates middlewares
   createValidator,
@@ -7,6 +6,7 @@ import {
 import {userByIdGet} from '../presentation-layer/users/user-by-id-get';
 import {usersGet} from '../presentation-layer/users/users-get';
 import {userCreate} from '../presentation-layer/users/user-create';
+import {checkTokenMiddleware} from '../middlewares/checkToken';
 import {
   userCreateBodySchema,
   userDeleteParamsSchema,
@@ -21,15 +21,27 @@ import {userUpdate} from '../presentation-layer/users/user-update';
 const userRouter = express.Router();
 const validator = createValidator();
 
-userRouter.get('/', validator.query(usersGetQuerySchema), usersGet);
-userRouter.get('/:userId', validator.params(userGetParamsSchema), userByIdGet);
+userRouter.get(
+  '/',
+  checkTokenMiddleware,
+  validator.query(usersGetQuerySchema),
+  usersGet
+);
+userRouter.get(
+  '/:userId',
+  checkTokenMiddleware,
+  validator.params(userGetParamsSchema),
+  userByIdGet
+);
 userRouter.delete(
   '/:userId',
+  checkTokenMiddleware,
   validator.params(userDeleteParamsSchema),
   userByIdDelete
 );
 userRouter.put(
   '/:userId',
+  checkTokenMiddleware,
   validator.params(userUpdateParamsSchema),
   validator.body(userUpdateBodySchema),
   userUpdate

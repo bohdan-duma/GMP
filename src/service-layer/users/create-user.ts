@@ -7,7 +7,9 @@ import {
 import {EXCEPTION_BAD_DATA} from '../../utils/exceptions';
 import {getError} from '../../utils/error';
 
-export async function createUser(user: UserCreationAttributes): Promise<any> {
+export async function createUser(
+  user: UserCreationAttributes
+): Promise<UserAttributes> {
   if (!user.password || !/^[A-Za-z0-9]+$/.test(user.password)) {
     throw getError({
       type: EXCEPTION_BAD_DATA,
@@ -24,7 +26,7 @@ export async function createUser(user: UserCreationAttributes): Promise<any> {
       age: user.age,
       password: passwordEncrypted,
     });
-    return userCreated;
+    return userCreated.toJSON();
   } catch (error: any) {
     if (error.name === 'SequelizeUniqueConstraintError') {
       throw getError({
