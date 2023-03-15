@@ -29,7 +29,7 @@ export async function getUsers({
     raw: true,
   });
   return {
-    users: users.slice(offset, offset + limit),
+    users,
     count,
     limit,
     offset: offset + limit,

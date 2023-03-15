@@ -6,8 +6,8 @@ export const checkTokenMiddleware = (
   res: express.Response,
   next: express.NextFunction
 ) => {
-  let tokenHeaderKey = process.env.TOKEN_HEADER_KEY || '';
-  let jwtSecretKey = process.env.JWT_SECRET_KEY || '';
+  const tokenHeaderKey = process.env.TOKEN_HEADER_KEY || '';
+  const jwtSecretKey = process.env.JWT_SECRET_KEY || '';
 
   try {
     const token = req.header(tokenHeaderKey);
